@@ -1,0 +1,338 @@
+{
+  "name": "RAG Pipeline & Chatbot",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "# 1) RAG Pipeline & Chatbot",
+        "height": 80,
+        "width": 448,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -64,
+        48
+      ],
+      "id": "8f818761-3551-4328-863e-3b12dd2ca5b1",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "options": {
+          "batchSize": 512
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        432
+      ],
+      "id": "bbb9e7c7-7341-4593-acba-bfe96b8a107e",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "m6xebkWaYiGdEvmC",
+          "name": "demo3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        432,
+        432
+      ],
+      "id": "6615d587-d6ec-48bf-8ea8-85605619aa6f",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        688,
+        208
+      ],
+      "id": "a0dd4d78-bd29-4452-8dbb-b0c9d144f32b",
+      "name": "When chat message received",
+      "webhookId": "110859a0-a77c-4c66-9844-af9e13351383"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        80,
+        224
+      ],
+      "id": "72ca8716-7a94-4153-a8a1-3da8c8e71cf8",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "ihwUIShXfnnNjRwD",
+          "name": "macRAGdrive"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "\"Use this tool to find information about Vinothkumar's resume, including his education, skills, and detailed project list.\"",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "demoragmacbook",
+          "mode": "list",
+          "cachedResultName": "demoragmacbook"
+        },
+        "topK": 10,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.3,
+      "position": [
+        880,
+        528
+      ],
+      "id": "c6a44e5a-4e3d-4643-adf1-cd5eb399c313",
+      "name": "Pinecone Vector Store1",
+      "credentials": {
+        "pineconeApi": {
+          "id": "8d0yyTQDFtTrtL2Q",
+          "name": "PineconeApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        928,
+        720
+      ],
+      "id": "0bfa00ca-e254-4004-b5a4-2e1511bc1367",
+      "name": "Embeddings OpenAI1",
+      "credentials": {
+        "openAiApi": {
+          "id": "m6xebkWaYiGdEvmC",
+          "name": "demo3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        912,
+        208
+      ],
+      "id": "6ccce28d-38cd-4557-b65d-f4c57bed4c70",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-3.5-turbo",
+          "mode": "list",
+          "cachedResultName": "gpt-3.5-turbo"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        784,
+        416
+      ],
+      "id": "585ac057-8aa9-40d2-abdc-ee6abb9fd7f3",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "m6xebkWaYiGdEvmC",
+          "name": "demo3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "demoragmacbook",
+          "mode": "list",
+          "cachedResultName": "demoragmacbook"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.3,
+      "position": [
+        288,
+        224
+      ],
+      "id": "6b9fd8e5-81b9-4327-ae3b-34ddb1009765",
+      "name": "Pinecone Vector Store",
+      "credentials": {
+        "pineconeApi": {
+          "id": "8d0yyTQDFtTrtL2Q",
+          "name": "PineconeApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "fileId": {
+          "__rl": true,
+          "value": "1D03yEYhHLbKGQw65j1Pu95jhm7aD5O9K2802A5i8ljc",
+          "mode": "list",
+          "cachedResultName": "Google free courses !",
+          "cachedResultUrl": "https://docs.google.com/document/d/1D03yEYhHLbKGQw65j1Pu95jhm7aD5O9K2802A5i8ljc/edit?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -144,
+        224
+      ],
+      "id": "3ada6256-fd41-4809-ba46-5c304f0eb514",
+      "name": "Update file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "ihwUIShXfnnNjRwD",
+          "name": "macRAGdrive"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pinecone Vector Store1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update file": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "78909faf-af46-4f85-83d5-098352b44037",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "911543e6e6b474c2766b65f0086125648182c864767bc2e029e0ffcc3e92bc3b"
+  },
+  "id": "0PvF0i_oMOUnwO4rpJWPa",
+  "tags": []
+}
